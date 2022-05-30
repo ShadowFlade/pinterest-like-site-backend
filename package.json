@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --trace-warnings index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap-icons": "^1.8.2",
+    "cloudinary": "^1.30.0",
+    "connect-mongodb-session": "^3.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "mongodb": "^4.6.0",
+    "multer": "^1.4.4",
+    "nanoid": "^3.3.4",
+    "node": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.34",
+    "nodemon": "^2.0.16"
+  }
+}
