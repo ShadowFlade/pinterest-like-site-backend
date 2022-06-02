@@ -24,7 +24,7 @@ const upload = ({ img, id }) => {
 try {
   client.connect();
 } catch (e) {
-  console.error(e);
+  console.error(e, 'Client could not connect');
 }
 
 module.exports = { client, upload };

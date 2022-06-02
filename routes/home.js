@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { nanoid } = require('nanoid');
-const { client, upload } = require('../middleware/connection');
+const { client, upload } = require('../middleware/connectionMW');
 const homeRouter = Router();
 homeRouter.get('/', async (req, res) => {
   const pinterest = client.db().collection('pins').find();
