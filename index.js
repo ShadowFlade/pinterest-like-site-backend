@@ -52,7 +52,7 @@ const start = async () => {
 	}
 };
 start().then(() => {
-	console.log('success');
+	console.error('success');
 });
 
 app.use('/', homeRouter);

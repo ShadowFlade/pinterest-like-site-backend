@@ -7,18 +7,15 @@ pinDetailedRouter.get('/detailed/:id', async (req, res) => {
 	try {
 		const pins = client.db().collection('pins');
 		const users = client.db().collection('users');
-		console.log(req.params);
 		const pin = await pins.findOne({ _id: ObjectId(req.params.id) });
-		console.log(pin, 'PIN');
 		let author;
-		if (pin.author) {
-			author = await users.findOne({ $or: [{ name: pin.author }, { email: pin.author }] });
+		if (pin.authorId) {
+			author = await users.findOne({ _id: ObjectId(pin.authorId) });
 		}
 		const response = { pin, author };
-		console.log(response);
 		res.json(response);
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 	}
 });
 
