@@ -10,6 +10,8 @@ const registerRouter = require('./routes/register');
 const loginRouter = require('./routes/login');
 const varMiddleware = require('./middleware/variablesMW');
 const pinDetailedRouter = require('./routes/pinDetailed.js');
+const suggestedRouter = require('./routes/suggested');
+
 const MongoStore = require('connect-mongodb-session')(session);
 
 const app = express();
@@ -60,3 +62,4 @@ app.use('/pinupload', uploadPinRouter);
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/pin', pinDetailedRouter);
+app.use('/suggested', suggestedRouter);

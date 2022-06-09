@@ -4,8 +4,11 @@ const { Router } = require('express');
 const { nanoid } = require('nanoid');
 const { client, upload } = require('../middleware/connectionMW');
 const { uploadFile } = require('../middleware/fileMW');
+const getRandomKeywords = require('../data/keywords');
+
 const uploadPinRouter = new Router();
 uploadPinRouter.post('/', uploadFile.single('file'), async (req, res) => {
+	const randomKeywords = getRandomKeywords(3);
 	const body = req.body;
 	body.file = req.file;
 
@@ -25,6 +28,7 @@ uploadPinRouter.post('/', uploadFile.single('file'), async (req, res) => {
 				title: body.title,
 				description: body.description || '',
 				authorId: req.body.authorId,
+				keywords: randomKeywords,
 			});
 		const directory = 'images';
 		fs.readdir(directory, (err, files) => {
