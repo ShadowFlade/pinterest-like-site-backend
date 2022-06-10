@@ -3,11 +3,9 @@ const cors = require('cors');
 const session = require('express-session');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const path = require('path');
 const { homeRouter } = require('./routes/home.js');
 const uploadPinRouter = require('./routes/uploadPin');
-const registerRouter = require('./routes/register');
-const loginRouter = require('./routes/login');
+const authRouter = require('./routes/auth');
 const varMiddleware = require('./middleware/variablesMW');
 const pinDetailedRouter = require('./routes/pinDetailed.js');
 const suggestedRouter = require('./routes/suggested');
@@ -59,8 +57,7 @@ start().then(() => {
 });
 
 app.use('/', homeRouter);
+app.use('/auth', authRouter);
 app.use('/pinupload', uploadPinRouter);
-app.use('/register', registerRouter);
-app.use('/login', loginRouter);
 app.use('/pin', pinDetailedRouter);
 app.use('/suggested', suggestedRouter);

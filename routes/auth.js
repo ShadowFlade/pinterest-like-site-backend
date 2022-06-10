@@ -3,10 +3,11 @@ const multer = require('multer');
 const multiPart = multer({});
 const { client } = require('../middleware/connectionMW');
 const bcrypt = require('bcryptjs');
-const loginRouter = new Router();
+
+const authRouter = new Router();
 const users = client.db().collection('users');
 
-loginRouter.get('/auth', (req, res) => {
+authRouter.get('/', (req, res) => {
 	try {
 		if (req.session.isAuth) {
 			const response = { isAuth: true, user: req.session.user };
@@ -18,7 +19,7 @@ loginRouter.get('/auth', (req, res) => {
 		console.error(e);
 	}
 });
-loginRouter.post('/', multiPart.any(), async (req, res) => {
+authRouter.post('/login', multiPart.any(), async (req, res) => {
 	const user = await users.findOne({ email: req.body.email, password: req.body.password });
 	if (user) {
 		req.session.user = user;
@@ -27,7 +28,6 @@ loginRouter.post('/', multiPart.any(), async (req, res) => {
 			if (err) {
 				throw err;
 			}
-			// res.redirect('/');
 			return res.json({ success: 'Success' });
 		});
 	} else {
@@ -35,4 +35,16 @@ loginRouter.post('/', multiPart.any(), async (req, res) => {
 	}
 });
 
-module.exports = loginRouter;
+authRouter.post('/register', multiPart.any(), async (req, res) => {
+	const users = client.db().collection('users');
+	const { email, password } = req.body;
+	const candidate = await users.findOne({ email });
+	if (candidate) {
+		res.json({ error: 'User with this email already exists' });
+	} else {
+		const user = { email, password };
+		users.insertOne(user);
+		res.json({ success: 'User was created' });
+	}
+});
+module.exports = authRouter;
