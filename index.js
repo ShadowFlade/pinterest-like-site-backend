@@ -30,8 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(function (req, res, next) {
 	res.header('Content-Type', 'application/json;charset=UTF-8');
 	res.header('Access-Control-Allow-Credentials', true);
-	res.header('Access-Control-Allow-Origin', 'http://localhost');
-
+	// res.header('Access-Control-Allow-Origin', 'http://localhost');
 	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 	next();
 });
@@ -40,12 +39,12 @@ app.use(
 	session({
 		secret: 'some secret value',
 		resave: false,
-		saveUninitialized: true,
+		saveUninitialized: false,
 		store,
 		cookie: { maxAge: ONE_DAY },
 	})
 );
-app.use(cookieParser());
+app.use(cookieParser('some secret value'));
 app.use(varMiddleware);
 
 const start = async () => {

@@ -27,7 +27,8 @@ loginRouter.post('/', multiPart.any(), async (req, res) => {
 			if (err) {
 				throw err;
 			}
-			res.json({ success: 'Success' });
+			// res.redirect('/');
+			return res.json({ success: 'Success' });
 		});
 	} else {
 		res.json({ error: 'No user was found with provided credentials' });
