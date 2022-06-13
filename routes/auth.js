@@ -38,13 +38,24 @@ authRouter.post('/login', multiPart.any(), async (req, res) => {
 authRouter.post('/register', multiPart.any(), async (req, res) => {
 	const users = client.db().collection('users');
 	const { email, password } = req.body;
+	const hashPassword = await bcrypt.hash(password, 10);
+
 	const candidate = await users.findOne({ email });
 	if (candidate) {
 		res.json({ error: 'User with this email already exists' });
 	} else {
-		const user = { email, password };
+		const user = { email, password: hashPassword };
 		users.insertOne(user);
 		res.json({ success: 'User was created' });
+	}
+});
+
+authRouter.get('/logout', async (req, res) => {
+	try {
+		req.session.destroy();
+		res.json({ success: 'logout successful' });
+	} catch (e) {
+		console.error(e);
 	}
 });
 module.exports = authRouter;
