@@ -20,8 +20,10 @@ authRouter.get('/', (req, res) => {
 	}
 });
 authRouter.post('/login', multiPart.any(), async (req, res) => {
-	const user = await users.findOne({ email: req.body.email, password: req.body.password });
-	if (user) {
+	const user = await users.findOne({ email: req.body.email });
+	const areSame = await bcrypt.compare(req.body.password, user.password);
+
+	if (user && areSame) {
 		req.session.user = user;
 		req.session.isAuth = true;
 		req.session.save((err) => {
