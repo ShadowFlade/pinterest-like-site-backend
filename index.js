@@ -13,6 +13,7 @@ const pinRouter = require('./routes/pin');
 const MongoStore = require('connect-mongodb-session')(session);
 
 const app = express();
+const allowedOrigins = ['http://localhost', 'http://res.cloudinary.com'];
 
 const store = new MongoStore({
 	collection: 'sessions',
@@ -20,17 +21,29 @@ const store = new MongoStore({
 });
 app.use(
 	cors({
-		origin: 'http://localhost',
+		origin: allowedOrigins,
+		credentials: true,
 	})
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(function (req, res, next) {
-	res.header('Content-Type', 'application/json;charset=UTF-8');
-	res.header('Access-Control-Allow-Credentials', true);
+	const index = req.rawHeaders.findIndex((el) => el === 'Origin');
+	const origin = req.rawHeaders[index + 1];
+	// if (allowedOrigins.includes(origin)) {
+	// 	res.header('Access-Control-Allow-Origin', origin);
+	// } else {
+	// 	res.header('Access-Control-Allow-Origin', false);
+	// }
 
-	res.header('Access-Control-Allow-Origin', 'http://localhost');
-	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+	res.header('Content-Type', 'application/json;charset=UTF-8');
+	// res.header('Access-Control-Allow-Credentials', true);
+	res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,PUT,PATCH,DELETE,HEAD');
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, X-PINGOTHER'
+	);
 	next();
 });
 const ONE_DAY = 1000 * 60 * 60 * 24;

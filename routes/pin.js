@@ -6,7 +6,6 @@ const router = new Router();
 
 router.post('/delete', async (req, res) => {
 	const id = req.body._id;
-	console.log(id);
 	try {
 		await client
 			.db()
