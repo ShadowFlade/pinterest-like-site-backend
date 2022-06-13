@@ -29,21 +29,9 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(function (req, res, next) {
-	const index = req.rawHeaders.findIndex((el) => el === 'Origin');
-	const origin = req.rawHeaders[index + 1];
-	// if (allowedOrigins.includes(origin)) {
-	// 	res.header('Access-Control-Allow-Origin', origin);
-	// } else {
-	// 	res.header('Access-Control-Allow-Origin', false);
-	// }
-
 	res.header('Content-Type', 'application/json;charset=UTF-8');
-	// res.header('Access-Control-Allow-Credentials', true);
 	res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,PUT,PATCH,DELETE,HEAD');
-	res.header(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept, X-PINGOTHER'
-	);
+	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 	next();
 });
 const ONE_DAY = 1000 * 60 * 60 * 24;
