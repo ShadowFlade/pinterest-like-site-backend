@@ -19,7 +19,7 @@ uploadPinRouter.post('/', uploadFile.single('file'), async (req, res) => {
 			id: `${nanoid()}`,
 		});
 		const publicURL = uploadedImg.url;
-
+		const tags = uploadedImg.info.detection.object_detection.data['cld-fashion'].tags.keys();
 		await client
 			.db()
 			.collection('pins')
@@ -28,7 +28,7 @@ uploadPinRouter.post('/', uploadFile.single('file'), async (req, res) => {
 				title: body.title,
 				description: body.description || '',
 				authorId: req.body.authorId,
-				keywords: randomKeywords,
+				keywords: tags,
 			});
 		const directory = 'images';
 		fs.readdir(directory, (err, files) => {
@@ -40,7 +40,7 @@ uploadPinRouter.post('/', uploadFile.single('file'), async (req, res) => {
 				});
 			}
 		});
-		res.json();
+		res.json(tags);
 	} catch (e) {
 		console.error(e);
 	}
