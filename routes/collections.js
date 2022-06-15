@@ -5,7 +5,6 @@ const router = new Router();
 
 router.post('/my', async (req, res) => {
 	const collectionsCollection = await client.db().collection('collections');
-	console.log(req.body);
 	const collections = await collectionsCollection
 		.find({ author: ObjectId(req.body.user._id) })
 		.toArray();
