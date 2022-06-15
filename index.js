@@ -8,6 +8,7 @@ const authRouter = require('./routes/auth');
 const varMiddleware = require('./middleware/variablesMW');
 const pinRouter = require('./routes/pin');
 const profileRouter = require('./routes/profile');
+const collectionRouter = require('./routes/collections');
 const MongoStore = require('connect-mongodb-session')(session);
 
 const app = express();
@@ -60,3 +61,4 @@ app.use('/', homeRouter);
 app.use('/auth', authRouter);
 app.use('/profile', profileRouter);
 app.use('/pin', pinRouter);
+app.use('/collections', collectionRouter);
