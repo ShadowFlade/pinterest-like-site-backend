@@ -4,11 +4,8 @@ const session = require('express-session');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const { homeRouter } = require('./routes/home.js');
-const uploadPinRouter = require('./routes/uploadPin');
 const authRouter = require('./routes/auth');
 const varMiddleware = require('./middleware/variablesMW');
-const pinDetailedRouter = require('./routes/pinDetailed.js');
-const suggestedRouter = require('./routes/suggested');
 const pinRouter = require('./routes/pin');
 const profileRouter = require('./routes/profile');
 const MongoStore = require('connect-mongodb-session')(session);
@@ -61,8 +58,5 @@ start().then(() => {
 
 app.use('/', homeRouter);
 app.use('/auth', authRouter);
-app.use('/pinupload', uploadPinRouter);
-app.use('/pin', pinDetailedRouter);
-app.use('/suggested', suggestedRouter);
-app.use('/pin', pinRouter);
 app.use('/profile', profileRouter);
+app.use('/pin', pinRouter);

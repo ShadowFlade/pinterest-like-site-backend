@@ -4,20 +4,4 @@ const ObjectId = require('mongodb').ObjectId;
 const auth = require('../middleware/authMW');
 const pinDetailedRouter = new Router();
 
-pinDetailedRouter.get('/detailed/:id', auth, async (req, res) => {
-	try {
-		const pins = client.db().collection('pins');
-		const users = client.db().collection('users');
-		const pin = await pins.findOne({ _id: ObjectId(req.params.id) });
-		let author;
-		if (pin.authorId) {
-			author = await users.findOne({ _id: ObjectId(pin.authorId) });
-		}
-		const response = { pin, author };
-		res.json(response);
-	} catch (e) {
-		console.error(e);
-	}
-});
-
 module.exports = pinDetailedRouter;
