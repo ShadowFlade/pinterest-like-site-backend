@@ -7,7 +7,7 @@ const { uploadFile } = require('../middleware/fileMW');
 const auth = require('../middleware/authMW');
 const ObjectId = require('mongodb').ObjectId;
 const router = new Router();
-
+const pinUpload = require('../middleware/pinUploadMW');
 router.post('/delete', async (req, res) => {
 	const id = req.body._id;
 	try {
@@ -42,37 +42,7 @@ router.post('/upload', uploadFile.single('file'), async (req, res) => {
 	body.file = req.file;
 
 	try {
-		const URL = body.file.path || req.URL;
-		const uploadedImg = await upload({
-			img: URL,
-			id: `${nanoid()}`,
-		});
-		const publicURL = uploadedImg.url;
-		const tags = [];
-		const tagsData = uploadedImg.info.detection.object_detection.data['cld-fashion'].tags;
-		tags.push(...Object.keys(tagsData));
-
-		await client
-			.db()
-			.collection('pins')
-			.insertOne({
-				img: publicURL,
-				title: body.title,
-				description: body.description || '',
-				authorId: req.body.authorId,
-				keywords: tags,
-			});
-		const directory = 'images';
-		fs.readdir(directory, (err, files) => {
-			if (err) throw err;
-
-			for (const file of files) {
-				fs.unlink(path.join(directory, file), (err) => {
-					if (err) throw err;
-				});
-			}
-		});
-		res.json(tags);
+		pinUpload(body);
 	} catch (e) {
 		console.error(e);
 	}
