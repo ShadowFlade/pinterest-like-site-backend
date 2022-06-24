@@ -1,5 +1,6 @@
 const { nanoid } = require('nanoid');
 const { upload, client } = require('../middleware/connectionMW');
+const { ObjectId } = require('mongodb');
 const fs = require('fs');
 const path = require('path');
 module.exports = async function (pin) {
@@ -20,7 +21,7 @@ module.exports = async function (pin) {
 			img: publicURL,
 			title: pin.title,
 			description: pin.description || '',
-			authorId: pin.authorId,
+			authorId: ObjectId(pin.authorId),
 			keywords: tags,
 		});
 	const directory = 'images';
