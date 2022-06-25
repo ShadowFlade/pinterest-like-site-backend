@@ -10,10 +10,10 @@ const users = client.db().collection('users');
 authRouter.get('/', (req, res) => {
 	try {
 		if (req.session.isAuth) {
-			const response = { isAuth: true, user: req.session.user };
+			const response = { isAuth: true, user: req.session.user, csrf: res.csrf };
 			res.json(response);
 		} else {
-			res.json({ isAuth: false });
+			res.json({ isAuth: false, csrf: res.csrf });
 		}
 	} catch (e) {
 		console.error(e);
@@ -22,7 +22,6 @@ authRouter.get('/', (req, res) => {
 authRouter.post('/login', multiPart.any(), async (req, res) => {
 	const user = await users.findOne({ email: req.body.email });
 	const areSame = await bcrypt.compare(req.body.password, user.password);
-
 	if (user && areSame) {
 		req.session.user = user;
 		req.session.isAuth = true;

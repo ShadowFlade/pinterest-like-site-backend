@@ -1,13 +1,11 @@
 const { Router } = require('express');
-const fs = require('fs');
-const path = require('path');
-const { nanoid } = require('nanoid');
-const { client, upload } = require('../middleware/connectionMW');
+const { client } = require('../middleware/connectionMW');
 const { uploadFile } = require('../middleware/fileMW');
 const auth = require('../middleware/authMW');
 const ObjectId = require('mongodb').ObjectId;
 const router = new Router();
 const pinUpload = require('../middleware/pinUploadMW');
+
 router.post('/delete', async (req, res) => {
 	const id = req.body._id;
 	try {

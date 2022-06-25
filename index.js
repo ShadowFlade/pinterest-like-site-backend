@@ -10,6 +10,7 @@ const pinRouter = require('./routes/pin');
 const profileRouter = require('./routes/profile');
 const collectionRouter = require('./routes/collections');
 const MongoStore = require('connect-mongodb-session')(session);
+const csurf = require('csurf');
 
 const app = express();
 const allowedOrigins = ['http://localhost', 'http://res.cloudinary.com'];
@@ -44,6 +45,8 @@ app.use(
 	})
 );
 app.use(cookieParser('some secret value'));
+app.use(csurf({ cookie: true }));
+
 app.use(varMiddleware);
 
 const start = async () => {
