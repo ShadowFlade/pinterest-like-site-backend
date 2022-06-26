@@ -11,7 +11,7 @@ const profileRouter = require('./routes/profile');
 const collectionRouter = require('./routes/collections');
 const MongoStore = require('connect-mongodb-session')(session);
 const csurf = require('csurf');
-
+const errorHandler = require('./middleware/error');
 const app = express();
 const allowedOrigins = ['http://localhost', 'http://res.cloudinary.com'];
 
@@ -37,7 +37,7 @@ app.use(function (req, res, next) {
 const ONE_DAY = 1000 * 60 * 60 * 24;
 app.use(
 	session({
-		secret: 'some secret value',
+		secret: process.env.SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
 		store,
@@ -65,3 +65,4 @@ app.use('/auth', authRouter);
 app.use('/profile', profileRouter);
 app.use('/pin', pinRouter);
 app.use('/collections', collectionRouter);
+app.use(errorHandler);

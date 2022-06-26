@@ -1,3 +1,4 @@
+const { body, validationResult } = require('express-validator');
 const { Router } = require('express');
 const multer = require('multer');
 const multiPart = multer({});
@@ -36,7 +37,12 @@ authRouter.post('/login', multiPart.any(), async (req, res) => {
 	}
 });
 
-authRouter.post('/register', multiPart.any(), async (req, res) => {
+authRouter.post('/register', body('email').isEmail(), multiPart.any(), async (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		res.json({ error: errors.array()[0].msg });
+		return res.status(422).redirect('/');
+	}
 	const users = client.db().collection('users');
 	const { email, password } = req.body;
 	const hashPassword = await bcrypt.hash(password, 10);
