@@ -19,6 +19,7 @@ const allowedOrigins = [
 	'http://localhost',
 	'http://res.cloudinary.com',
 	'https://floating-earth-90111.herokuapp.com/',
+	'https://shadowflade.github.io/pinterest-like-site-client-/',
 ];
 
 const store = new MongoStore({
