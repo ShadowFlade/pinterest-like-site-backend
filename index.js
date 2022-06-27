@@ -1,4 +1,6 @@
 require('dotenv').config();
+const compression = require('compression');
+const helmet = require('helmet');
 const cors = require('cors');
 const session = require('express-session');
 const express = require('express');
@@ -46,8 +48,9 @@ app.use(
 );
 app.use(cookieParser('some secret value'));
 app.use(csurf({ cookie: true }));
-
+app.use(helmet());
 app.use(varMiddleware);
+app.use(compression());
 
 const start = async () => {
 	try {
