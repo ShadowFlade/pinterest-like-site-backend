@@ -15,7 +15,11 @@ const MongoStore = require('connect-mongodb-session')(session);
 const csurf = require('csurf');
 const errorHandler = require('./middleware/error');
 const app = express();
-const allowedOrigins = ['http://localhost', 'http://res.cloudinary.com'];
+const allowedOrigins = [
+	'http://localhost',
+	'http://res.cloudinary.com',
+	'https://floating-earth-90111.herokuapp.com/',
+];
 
 const store = new MongoStore({
 	collection: 'sessions',
