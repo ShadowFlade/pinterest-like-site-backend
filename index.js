@@ -17,7 +17,7 @@ const errorHandler = require('./middleware/error');
 const app = express();
 const allowedOrigins = [
 	'http://localhost',
-	'http://res.cloudinary.com',
+	'https://res.cloudinary.com',
 	'https://floating-earth-90111.herokuapp.com',
 	'https://shadowflade.github.io',
 ];
