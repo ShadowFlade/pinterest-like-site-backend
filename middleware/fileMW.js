@@ -4,12 +4,10 @@ const path = require('path');
 const storage = multer.diskStorage({
 	destination(req, file, cb) {
 		const directory = path.resolve(__dirname, 'images');
-		console.log('🚀 ~ file: fileMW.js ~ line 7 ~ destination ~ directory', directory);
 		if (!fs.existsSync(directory)) {
-			console.log('doesnot exist');
 			fs.mkdir(directory, (e) => {
 				if (e) {
-					console.log(e);
+					console.error(e, ' could not create the directory');
 				}
 			});
 		}

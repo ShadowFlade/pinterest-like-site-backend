@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 module.exports = async function (pin) {
 	const URL = pin.file.path || pin.URL;
+	console.log('🚀 ~ file: pinUploadMW.js ~ line 8 ~ URL', URL);
 
 	const uploadedImg = await upload({
 		img: URL,
@@ -26,21 +27,17 @@ module.exports = async function (pin) {
 			keywords: tags,
 		});
 	const directory = path.resolve(__dirname, 'images');
-	console.log('🚀 ~ file: pinUploadMW.js ~ line 29 ~ directory', directory);
 	try {
-		if (fs.existsSync(directory)) {
-			console.log('exists');
-		}
 		const files = fs.readdirSync(directory);
 		files.forEach((file) => {
 			fs.unlink(path.resolve(directory, file), (err) => {
 				if (err) {
-					console.log(err);
+					console.error(err);
 				}
 			});
 		});
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 	}
 	return tags;
 };
