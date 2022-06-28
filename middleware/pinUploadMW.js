@@ -9,7 +9,7 @@ module.exports = async function (pin) {
 		img: URL,
 		id: `${nanoid()}`,
 	});
-	const publicURL = uploadedImg.url;
+	const publicURL = uploadedImg.url.replace(/http/, 'https');
 	const tags = [];
 	const tagsData = uploadedImg.info.detection.object_detection.data['cld-fashion'].tags;
 	tags.push(...Object.keys(tagsData));
