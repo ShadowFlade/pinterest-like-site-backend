@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 const compression = require('compression');
 const helmet = require('helmet');
@@ -48,7 +50,7 @@ app.use(
 		resave: false,
 		saveUninitialized: false,
 		store,
-		cookie: { maxAge: ONE_DAY },
+		cookie: { maxAge: ONE_DAY, secure: true },
 	})
 );
 app.use(cookieParser('some secret value'));
