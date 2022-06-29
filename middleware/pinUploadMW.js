@@ -37,8 +37,8 @@ module.exports = async function (pin) {
 				}
 			});
 		});
+		return tags;
 	} catch (e) {
 		console.error(e);
 	}
-	return tags;
 };
