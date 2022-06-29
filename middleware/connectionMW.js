@@ -10,13 +10,14 @@ cloudinary.config({
 });
 
 const upload = ({ img, id }) => {
+	console.log(process.env.CLOUDINARY_API_SECRET);
 	try {
 		return cloudinary.uploader.upload(
 			img,
 			{ detection: 'cld-fashion', auto_tagging: 0.6 },
 			function (error, result) {
 				if (error) {
-					console.error(error, 'ERROR');
+					console.error(`${error} Errorrr`);
 				}
 				return result;
 			}
