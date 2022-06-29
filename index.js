@@ -44,6 +44,7 @@ app.use(function (req, res, next) {
 	next();
 });
 const ONE_DAY = 1000 * 60 * 60 * 24;
+app.set('trust proxy', 1);
 app.use(
 	session({
 		secret: process.env.SESSION_SECRET,
@@ -53,7 +54,7 @@ app.use(
 		cookie: { maxAge: ONE_DAY, secure: true },
 	})
 );
-app.use(cookieParser('some secret value'));
+app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(csurf({ cookie: true }));
 app.use(helmet());
 app.use(varMiddleware);
@@ -69,7 +70,7 @@ const start = async () => {
 	}
 };
 start().then(() => {
-	console.error('success');
+	console.error('success local');
 });
 
 app.use('/', homeRouter);

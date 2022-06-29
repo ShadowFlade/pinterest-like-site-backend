@@ -21,19 +21,26 @@ authRouter.get('/', (req, res) => {
 	}
 });
 authRouter.post('/login', multiPart.any(), async (req, res) => {
-	const user = await users.findOne({ email: req.body.email });
-	const areSame = await bcrypt.compare(req.body.password, user.password);
-	if (user && areSame) {
-		req.session.user = user;
-		req.session.isAuth = true;
-		req.session.save((err) => {
-			if (err) {
-				throw err;
-			}
-			return res.json({ success: 'Success' });
-		});
-	} else {
-		res.json({ error: 'No user was found with provided credentials' });
+	try {
+		const user = await users.findOne({ email: req.body.email });
+		console.log(user);
+		const areSame = await bcrypt.compare(req.body.password, user.password);
+		console.log(areSame, 'areSame');
+		if (user && areSame) {
+			req.session.user = user;
+			req.session.isAuth = true;
+			req.session.save((err) => {
+				if (err) {
+					throw err;
+				}
+				return res.json({ success: 'Success' });
+			});
+			console.log(req.session, 'SESSION');
+		} else {
+			res.json({ error: 'No user was found with provided credentials' });
+		}
+	} catch (e) {
+		console.error(e);
 	}
 });
 
