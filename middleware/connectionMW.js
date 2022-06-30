@@ -10,7 +10,6 @@ cloudinary.config({
 });
 
 const upload = ({ img, id }) => {
-	console.log(process.env.CLOUDINARY_API_SECRET);
 	try {
 		return cloudinary.uploader.upload(
 			img,

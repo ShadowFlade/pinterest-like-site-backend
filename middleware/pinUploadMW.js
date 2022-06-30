@@ -6,7 +6,6 @@ const path = require('path');
 module.exports = async function (pin) {
 	try {
 		const URL = pin.file.path || pin.URL;
-		console.log('🚀 ~ file: pinUploadMW.js ~ line 8 ~ URL', URL);
 
 		const uploadedImg = await upload({
 			img: URL,

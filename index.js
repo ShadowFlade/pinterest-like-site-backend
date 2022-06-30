@@ -16,6 +16,7 @@ const collectionRouter = require('./routes/collections');
 const MongoStore = require('connect-mongodb-session')(session);
 const csurf = require('csurf');
 const errorHandler = require('./middleware/error');
+const keys = require('./keys');
 const app = express();
 const allowedOrigins = [
 	'http://localhost',
@@ -45,13 +46,14 @@ app.use(function (req, res, next) {
 });
 const ONE_DAY = 1000 * 60 * 60 * 24;
 app.set('trust proxy', 1);
+
 app.use(
 	session({
 		secret: process.env.SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
 		store,
-		cookie: { maxAge: ONE_DAY, secure: true },
+		cookie: { maxAge: ONE_DAY, secure: keys.isSessionSecure },
 	})
 );
 app.use(cookieParser(process.env.SESSION_SECRET));
@@ -70,7 +72,7 @@ const start = async () => {
 	}
 };
 start().then(() => {
-	console.error('success local');
+	console.error('success on port', port);
 });
 
 app.use('/', homeRouter);
