@@ -19,7 +19,7 @@ router.post('/delete', async (req, res) => {
 	}
 });
 
-router.get('/detailed/:id', auth, async (req, res) => {
+router.get('/detailed/:id', async (req, res) => {
 	try {
 		const pins = client.db().collection('pins');
 		const users = client.db().collection('users');
@@ -35,10 +35,9 @@ router.get('/detailed/:id', auth, async (req, res) => {
 	}
 });
 
-router.post('/upload', uploadFile.single('file'), async (req, res) => {
+router.post('/upload', auth, uploadFile.single('file'), async (req, res) => {
 	const body = req.body;
 	body.file = req.file;
-
 	try {
 		pinUpload(body);
 	} catch (e) {
@@ -46,10 +45,11 @@ router.post('/upload', uploadFile.single('file'), async (req, res) => {
 	}
 });
 
-router.post('/suggested', async (req, res) => {
-	const keywords = req.body;
+router.post('/suggested', uploadFile.any(), async (req, res) => {
+	const keywords = req.body.keywords;
 	const pins = client.db().collection('pins');
 	const match = await pins.find({ keywords: { $in: [...keywords] } }).toArray();
+
 	await res.json(match);
 });
 
