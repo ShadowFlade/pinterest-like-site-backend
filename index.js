@@ -23,6 +23,7 @@ const allowedOrigins = [
 	'https://res.cloudinary.com',
 	'https://floating-earth-90111.herokuapp.com',
 	'https://shadowflade.github.io',
+	'https://pinterest-front1337.herokuapp.com'
 ];
 
 const store = new MongoStore({
