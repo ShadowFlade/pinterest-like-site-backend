@@ -12,15 +12,12 @@ profileRouter.get('/:id', async (req, res) => {
 			.db()
 			.collection('users')
 			.findOne({ _id: ObjectId(req.params.id) });
-		console.log(user);
 		res.json({ email: user.email });
 	} catch (reason) {
 		res.json({ error: 'No user user with that id' });
 		console.error(reason);
 	}
 });
-profileRouter.get('/me', auth, (req, res) => {
-	console.log('profile me route');
-});
+profileRouter.get('/me', auth, (req, res) => {});
 
 module.exports = profileRouter;
