@@ -11,6 +11,7 @@ const users = client.db().collection('users');
 authRouter.get('/', (req, res) => {
 	try {
 		if (req.session.isAuth) {
+			delete req.session.user.password
 			const response = { isAuth: true, user: req.session.user, csrf: res.csrf };
 			res.json(response);
 		} else {
@@ -41,12 +42,11 @@ authRouter.post('/login', multiPart.any(), async (req, res) => {
 	}
 });
 
-authRouter.post('/register', body('email').isEmail(), multiPart.any(), async (req, res) => {
+authRouter.post('/register', multiPart.any(),body('email').isEmail(),  async (req, res) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		res.json({ error: errors.array()[0].msg });
-		return res.status(422).redirect('/');
-	}
+		return res.json({ error: errors.array()[0].msg }).status(422).redirect('/');
+			}
 	const users = client.db().collection('users');
 	const { email, password } = req.body;
 	const hashPassword = await bcrypt.hash(password, 10);
