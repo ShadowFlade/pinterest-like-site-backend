@@ -25,6 +25,7 @@ homeRouter.get('/', async (req, res) => {
 		if ((await client.db().collection('pins').estimatedDocumentCount()) === 0) {
 			console.error('No documents found!');
 		}
+		
 		const items = [];
 		await pinterest.forEach((item) => {
 			const newItem = JSON.parse(JSON.stringify(item));

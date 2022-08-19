@@ -61,12 +61,6 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(csurf({ cookie: true }));
 app.use(helmet());
 app.use(varMiddleware);
-// app.use(function (req, res, next) {
-// 	if (req.session.user) {
-// 		varMiddleware();
-// 	}
-// 	next();
-// });
 app.use(compression());
 
 const devPort = process.env.NODE_ENV === 'development' ? 3000 : 3002;
