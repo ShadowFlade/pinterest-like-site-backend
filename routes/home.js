@@ -20,22 +20,20 @@ homeRouter.get('/pins/:numberOfPins', async (req, res) => {
 					},
 				},
 				{ $unwind: '$user' },
-			]).limit(Number(req.params.numberOfPins));
-			if ((await client.db().collection('pins').estimatedDocumentCount()) === 0) {
-				console.error('No documents found!');
-			}
-			
-			const items = [];
-			await pinterest.forEach((item) => {
-				const newItem = JSON.parse(JSON.stringify(item));
-				delete newItem.user.password;
-				items.push(newItem);
-			});
-	
-			res.json({ pinterest: items });
-		
+			])
+			.limit(Number(req.params.numberOfPins));
+		if ((await client.db().collection('pins').estimatedDocumentCount()) === 0) {
+			console.error('No documents found!');
+		}
 
+		const items = [];
+		await pinterest.forEach((item) => {
+			const newItem = JSON.parse(JSON.stringify(item));
+			delete newItem.user.password;
+			items.push(newItem);
+		});
 
+		res.json({ pinterest: items });
 	} catch (e) {
 		console.error(e);
 	}

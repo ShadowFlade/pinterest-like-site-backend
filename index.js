@@ -17,13 +17,14 @@ const MongoStore = require('connect-mongodb-session')(session);
 const csurf = require('csurf');
 const errorHandler = require('./middleware/error');
 const keys = require('./keys');
+console.log(process.env.SECRET_URI);
 const app = express();
 const allowedOrigins = [
 	'http://localhost',
 	'https://res.cloudinary.com',
 	'https://floating-earth-90111.herokuapp.com',
 	'https://shadowflade.github.io',
-	'https://pinterest-front1337.herokuapp.com'
+	'https://pinterest-front1337.herokuapp.com',
 ];
 
 const store = new MongoStore({

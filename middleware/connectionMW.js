@@ -27,6 +27,7 @@ const upload = ({ img, id }) => {
 };
 try {
 	client.connect();
+	console.log('connected');
 } catch (e) {
 	console.error(e, 'Client could not connect');
 }
