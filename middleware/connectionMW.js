@@ -1,7 +1,13 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const cloudinary = require('cloudinary').v2;
 
-const client = new MongoClient(process.env.SECRET_URI);
+const client = new MongoClient(process.env.SECRET_URI, {
+	serverApi: {
+		version: ServerApiVersion.v1,
+		strict: true,
+		deprecationErrors: true,
+	},
+});
 
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_NAME,
@@ -25,11 +31,15 @@ const upload = ({ img, id }) => {
 		console.error(e);
 	}
 };
-try {
-	client.connect();
-	console.log('connected');
-} catch (e) {
-	console.error(e, 'Client could not connect');
-}
 
+async function run() {
+	try {
+		client.connect();
+		// await client.db('admin').command({ ping: 1 });
+		console.log('connected');
+	} catch (e) {
+		console.error(e, 'Client could not connect');
+	}
+}
+run();
 module.exports = { client, upload };
