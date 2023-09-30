@@ -21,8 +21,8 @@ router.post('/delete', async (req, res) => {
 
 router.get('/detailed/:id', async (req, res) => {
 	try {
-		const pins = client.db().collection('pins');
-		const users = client.db().collection('users');
+		const pins = client.db('pinterest').collection('pins');
+		const users = client.db('pinterest').collection('users');
 		const pin = await pins.findOne({ _id: ObjectId(req.params.id) });
 		let author;
 		if (pin.authorId) {
