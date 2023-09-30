@@ -5,8 +5,6 @@ const { client } = require('../middleware/connectionMW');
 const profileRouter = new Router();
 
 profileRouter.get('/:id', async (req, res) => {
-	// const token = req.csrfToken();
-	// res.cookie('XSRF-TOKEN', token);
 	try {
 		const user = await client
 			.db()

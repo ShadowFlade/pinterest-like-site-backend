@@ -22,7 +22,7 @@ const upload = ({ img, id }) => {
 			{ detection: 'cld-fashion', auto_tagging: 0.6 },
 			function (error, result) {
 				if (error) {
-					console.error(`${error} Errorrr`);
+					console.error(`${error} Error`);
 				}
 				return result;
 			}
@@ -35,7 +35,6 @@ const upload = ({ img, id }) => {
 async function run() {
 	try {
 		client.connect();
-		// await client.db('admin').command({ ping: 1 });
 		console.log('connected');
 	} catch (e) {
 		console.error(e, 'Client could not connect');

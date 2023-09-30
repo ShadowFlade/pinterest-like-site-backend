@@ -17,7 +17,6 @@ const MongoStore = require('connect-mongodb-session')(session);
 const csurf = require('csurf');
 const errorHandler = require('./middleware/error');
 const keys = require('./keys');
-console.log(process.env.SECRET_URI);
 const app = express();
 const allowedOrigins = [
 	'http://localhost',

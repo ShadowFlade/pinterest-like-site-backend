@@ -3,10 +3,10 @@ const { nanoid } = require('nanoid');
 const { client, upload } = require('../middleware/connectionMW');
 const homeRouter = Router();
 homeRouter.get('/pins/:numberOfPins', async (req, res) => {
+	const collection = await client.db('pinterest').collection('pins');
+	console.log(collection, ' collection');
 	try {
-		const pinterest = client
-			.db()
-			.collection('pins')
+		const pinterest = collection
 			.aggregate([
 				{
 					$match: {},
@@ -22,7 +22,7 @@ homeRouter.get('/pins/:numberOfPins', async (req, res) => {
 				{ $unwind: '$user' },
 			])
 			.limit(Number(req.params.numberOfPins));
-		if ((await client.db().collection('pins').estimatedDocumentCount()) === 0) {
+		if ((await collection.estimatedDocumentCount()) === 0) {
 			console.error('No documents found!');
 		}
 
