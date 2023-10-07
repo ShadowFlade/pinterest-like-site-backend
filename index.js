@@ -13,6 +13,7 @@ const varMiddleware = require('./middleware/variablesMW');
 const pinRouter = require('./routes/pin');
 const profileRouter = require('./routes/profile');
 const collectionRouter = require('./routes/collections');
+const postponedPinRouter = require('./routes/postponed_pin');
 const MongoStore = require('connect-mongodb-session')(session);
 const csurf = require('csurf');
 const errorHandler = require('./middleware/error');
@@ -73,7 +74,7 @@ const start = async () => {
 	}
 };
 start().then(() => {
-	console.error('success on port', port);
+	console.error('success on port port', port);
 });
 
 app.use('/', homeRouter);
@@ -81,4 +82,6 @@ app.use('/auth', authRouter);
 app.use('/profile', profileRouter);
 app.use('/pin', pinRouter);
 app.use('/collections', collectionRouter);
+app.use('/postponedPin', postponedPinRouter);
+
 app.use(errorHandler);
