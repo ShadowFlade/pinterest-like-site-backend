@@ -6,10 +6,13 @@ const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fet
 const POSTPONED_PIN_PATH = keys.BASE_URL + '/postponedPin';
 // do a request to rout to check if the server is up
 async function run() {
-	const res = await fetch(POSTPONED_PIN_PATH);
-	console.log(res);
-	const data = await res.json();
-	console.log(data);
+	try {
+		const res = await fetch(POSTPONED_PIN_PATH);
+		const data = await res.json();
+		console.log('server is up');
+	} catch (e) {
+		console.log('server is down');
+	}
 }
 run();
 

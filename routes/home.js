@@ -4,7 +4,6 @@ const { client, upload } = require('../middleware/connectionMW');
 const homeRouter = Router();
 homeRouter.get('/pins/:numberOfPins', async (req, res) => {
 	const collection = await client.db('pinterest').collection('pins');
-	console.log(collection, ' collection');
 	try {
 		const pinterest = collection
 			.aggregate([

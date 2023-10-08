@@ -34,7 +34,7 @@ const upload = ({ img, id }) => {
 
 async function run() {
 	try {
-		client.connect();
+		await client.connect();
 		console.log('connected');
 	} catch (e) {
 		console.error(e, 'Client could not connect');
