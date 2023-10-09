@@ -1,3 +1,4 @@
+require('dotenv').config();
 const keys = require('../keys');
 const axios = require('axios');
 const logger = require('../utils/log');
@@ -11,8 +12,10 @@ async function run() {
 		await res.json();
 		console.log('server is up');
 		const postponed = new Postponed();
+		const updateResult = postponed.init();
 	} catch (e) {
-		console.log('server is down');
+		console.log('server is daun');
+		process.exit();
 	}
 }
 run();

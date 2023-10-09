@@ -11,7 +11,7 @@ const users = client.db().collection('users');
 authRouter.get('/', (req, res) => {
 	try {
 		if (req.session.isAuth) {
-			delete req.session.user.password
+			delete req.session.user.password;
 			const response = { isAuth: true, user: req.session.user, csrf: res.csrf };
 			res.json(response);
 		} else {
@@ -24,6 +24,7 @@ authRouter.get('/', (req, res) => {
 authRouter.post('/login', multiPart.any(), async (req, res) => {
 	try {
 		const user = await users.findOne({ email: req.body.email });
+		console.log(user);
 		const areSame = await bcrypt.compare(req.body.password, user.password);
 		if (user && areSame) {
 			req.session.user = user;
@@ -42,11 +43,11 @@ authRouter.post('/login', multiPart.any(), async (req, res) => {
 	}
 });
 
-authRouter.post('/register', multiPart.any(),body('email').isEmail(),  async (req, res) => {
+authRouter.post('/register', multiPart.any(), body('email').isEmail(), async (req, res) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		return res.json({ error: errors.array()[0].msg }).status(422).redirect('/');
-			}
+	}
 	const users = client.db().collection('users');
 	const { email, password } = req.body;
 	const hashPassword = await bcrypt.hash(password, 10);
