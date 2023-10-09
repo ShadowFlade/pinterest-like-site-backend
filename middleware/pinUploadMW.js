@@ -6,7 +6,7 @@ const path = require('path');
 module.exports = async function (pin) {
 	try {
 		const URL = pin.file.path || pin.URL;
-
+		const dateToPublish = pin.dateToPublish || null;
 		const uploadedImg = await upload({
 			img: URL,
 			id: `${nanoid()}`,
@@ -25,6 +25,8 @@ module.exports = async function (pin) {
 				description: pin.description || '',
 				authorId: ObjectId(pin.authorId),
 				keywords: tags,
+				DATE_INSERT: Date.now(),
+				DATE_TO_PUBLISH: dateToPublish,
 			});
 		const directory = path.resolve(__dirname, 'images');
 
