@@ -13,7 +13,7 @@ class Postponed {
 			throw new Error('error');
 		}
 		console.log('1');
-		this.db = client.db();
+		this.db = client.db('pinterest');
 
 		const pins = await this.getPins();
 		if (!pins) {
@@ -31,20 +31,25 @@ class Postponed {
 	}
 	async getPins() {
 		this.pinsCollection = await this.db.collection('pins');
-		const dayStart = this.getStartOfDay();
-		const dayEnd = this.ONE_DAY_IN_MILI_SECONDS + dayStart;
+		const dayStart = new Date().setHours(0, 0, 0, 0);
+		const dayEnd = this.ONE_DAY_IN_MILSECONDS - 1 + dayStart;
+		console.log({
+			dayStart,
+			dayEnd,
+			now: Date.now(),
+			is: dayEnd > dayStart,
+		});
 		const pins = await this.pinsCollection
 			.find({
-				DATE_TO_PUBLISH: [{ $gte: dayStart }, { $lt: dayEnd }],
+				DATE_TO_PUBLISH: { $gt: dayStart, $lt: dayEnd },
 			})
 			.toArray();
 
 		console.log('2');
-		console.log(pins, ' pins');
 		if (pins.length !== 0) {
 			return pins;
 		} else {
-			return false;
+			process.exit();
 		}
 	}
 	async postPins(pins) {
@@ -52,8 +57,6 @@ class Postponed {
 		pins.forEach((item) => (item.DATE_PUBLISHED = datePublished));
 		this.pinsCollection.insertMany(pins);
 	}
-
-	getStartOfDay(currTime) {}
 }
 
 module.exports = Postponed;
