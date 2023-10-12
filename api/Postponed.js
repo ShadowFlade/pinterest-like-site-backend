@@ -15,11 +15,12 @@ class Postponed {
 		this.db = client.db('pinterest');
 
 		const pins = await this.getPins();
+
 		if (!pins) {
 			return;
 		}
 		try {
-			const updateResult = this.postPins(pins);
+			const updateResult = await this.postPins(pins);
 			return { success: true };
 		} catch (e) {
 			return { success: false, error: e };
@@ -42,14 +43,12 @@ class Postponed {
 		}
 	}
 	async postPins(pins) {
-		const datePublished = Date.now();
-
-		pins.forEach((pin) => {
-			this.pinsCollection.updateOne(
-				{ _id: pin._id },
-				{ $set: { DATE_PUBLISHED: pin.DATE_TO_PUBLISH } }
+		for (const pin of pins) {
+			const updateRes = await this.pinsCollection.updateOne(
+				{ description: pin.description },
+				{ $set: { DATE_PUBLISHED: pin.DATE_TO_PUBLISH } } //this is dubious
 			);
-		});
+		}
 	}
 }
 

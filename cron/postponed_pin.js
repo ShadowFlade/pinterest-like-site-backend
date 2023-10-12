@@ -12,18 +12,11 @@ async function run() {
 		await res.json();
 		console.log('server is up');
 		const postponed = new Postponed();
-		const updateResult = postponed.init();
+		const updateResult = await postponed.init();
+		process.exit();
 	} catch (e) {
 		console.log('server is daun');
 		process.exit();
 	}
 }
 run();
-
-// const data2 = axios({
-// 	method: 'get',
-// 	url: POSTPONED_PIN_PATH,
-// 	responseType: 'json',
-// }).then((res) => {
-// 	logger.log('axios data' + '\n' + res);
-// });
