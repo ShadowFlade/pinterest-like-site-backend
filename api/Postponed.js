@@ -5,6 +5,8 @@ class Postponed {
 	constructor() {}
 	//get pins which should be posted this minute
 	ONE_DAY_IN_MILSECONDS = 60 * 60 * 24 * 1000;
+	ONE_MINUTE_IN_MILSECONDS = 60 * 1000;
+
 	async init() {
 		try {
 			client.connect();
@@ -28,8 +30,8 @@ class Postponed {
 	}
 	async getPins() {
 		this.pinsCollection = await this.db.collection('pins');
-		const dayStart = new Date().setHours(0, 0, 0, 0);
-		const dayEnd = this.ONE_DAY_IN_MILSECONDS - 1 + dayStart;
+		const dayStart = new Date().setSeconds(0,0);
+		const dayEnd = this.ONE_MINUTE_IN_MILSECONDS - 1 + dayStart;
 		const pins = await this.pinsCollection
 			.find({
 				DATE_TO_PUBLISH: { $gt: dayStart, $lt: dayEnd },
