@@ -48,7 +48,7 @@ authRouter.post('/register', multiPart.any(), body('email').isEmail(), async (re
 	if (!errors.isEmpty()) {
 		return res.json({ error: errors.array()[0].msg }).status(422).redirect('/');
 	}
-	const users = client.db().collection('users');
+	const users = client.db('pinterest').collection('users');
 	const { email, password } = req.body;
 	const hashPassword = await bcrypt.hash(password, 10);
 

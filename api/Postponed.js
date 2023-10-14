@@ -9,13 +9,12 @@ class Postponed {
 
 	async init() {
 		try {
-			client.connect();
+			await client.connect();
 		} catch (e) {
 			console.log('Could not connect to database ', e);
 			throw new Error('error');
 		}
 		this.db = client.db('pinterest');
-
 		const pins = await this.getPins();
 
 		if (!pins) {
@@ -30,7 +29,7 @@ class Postponed {
 	}
 	async getPins() {
 		this.pinsCollection = await this.db.collection('pins');
-		const dayStart = new Date().setSeconds(0,0);
+		const dayStart = new Date().setSeconds(0, 0);
 		const dayEnd = this.ONE_MINUTE_IN_MILSECONDS - 1 + dayStart;
 		const pins = await this.pinsCollection
 			.find({
@@ -47,8 +46,8 @@ class Postponed {
 	async postPins(pins) {
 		for (const pin of pins) {
 			const updateRes = await this.pinsCollection.updateOne(
-				{ description: pin.description },
-				{ $set: { DATE_PUBLISHED: pin.DATE_TO_PUBLISH } } //this is dubious
+				{ _id: pin._id },
+				{ $set: { DATE_PUBLISHED: Date.now() } }
 			);
 		}
 	}

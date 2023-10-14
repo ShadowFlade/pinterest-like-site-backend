@@ -13,7 +13,8 @@ async function run() {
 		await res.json();
 		console.log('server is up');
 		const postponed = new Postponed();
-		const updateResult = await postponed.init();
+		await postponed.init();
+		console.log('job finished ', new Date().toString());
 		process.exit();
 	} catch (e) {
 		console.log('server is daun');
