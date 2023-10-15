@@ -15,13 +15,16 @@ class Postponed {
 			throw new Error('error');
 		}
 		this.db = client.db('pinterest');
+
 		const pins = await this.getPins();
 
 		if (!pins) {
+			console.log('no pins');
 			return;
 		}
 		try {
 			const updateResult = await this.postPins(pins);
+			console.log(updateResult, ' update result');
 			return { success: true };
 		} catch (e) {
 			return { success: false, error: e };
@@ -40,10 +43,11 @@ class Postponed {
 		if (pins.length !== 0) {
 			return pins;
 		} else {
-			process.exit();
+			return;
 		}
 	}
 	async postPins(pins) {
+		console.log(pins);
 		for (const pin of pins) {
 			const updateRes = await this.pinsCollection.updateOne(
 				{ _id: pin._id },

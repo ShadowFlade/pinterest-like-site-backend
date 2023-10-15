@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "node index.js",
-		"dev": "nodemon index.js"
+		"dev": "nodemon index.js & > text.txt && nodemon cron/postponed_pin2.js > text2.txt 2>&1"
 	},
 	"keywords": [],
 	"author": "",

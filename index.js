@@ -18,6 +18,7 @@ const MongoStore = require('connect-mongodb-session')(session);
 const csurf = require('csurf');
 const errorHandler = require('./middleware/error');
 const keys = require('./keys');
+const { exec } = require('child_process');
 const app = express();
 const allowedOrigins = [
 	'http://localhost',
@@ -74,6 +75,18 @@ const start = async () => {
 	}
 };
 start().then(() => {
+	exec(
+		`nodemon ${keys.filePaths.SCHEDULED_JOBS}/postponed_pin2.js >> text3.text 2>&1`,
+		(err, stout, sterr) => {
+			// exec('nodemon scheduled_jobs/postponed_pin2.js >> text3.text 2>&1', (err, stout, sterr) => { for testing
+
+			console.log(stout);
+			console.log(sterr);
+			if (err !== null) {
+				console.log(`exec error: ${err}`);
+			}
+		}
+	);
 	console.error('success on port port', port);
 });
 
