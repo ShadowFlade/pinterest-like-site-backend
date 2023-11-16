@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const { parseCLIArgs } = require('./comand_line_arguments_parser');
+const fs = require("fs");
+const path = require("path");
+const { parseCLIArgs } = require("./comand_line_arguments_parser");
 
 /**
  *
@@ -21,7 +21,7 @@ class FileFormat {
 		currentFileFormat,
 		formatToFormatTo,
 		rootDirectory = __dirname,
-		excludeDirectories = ['node_modules', 'dist', 'build'],
+		excludeDirectories = ["node_modules", "dist", "build"],
 		isLog = true,
 		isDryRun = false,
 		isInProjectFolder = true,
@@ -30,13 +30,23 @@ class FileFormat {
 			const args = parseCLIArgs(process.argv);
 
 			//TODO isnt there a better way to do this?
+            //TODO well now this is total bullshit, need to fix this asap
 			if (args) {
-				rootDirectory = args.rootDirectory;
-				currentFileFormat = args.currentFileFormat;
-				formatToFormatTo = args.formatToFormatTo;
-				excludeDirectories = args.excludeDirectories;
-				(isDryRun = args.isDryRun), (isLog = args.isLog);
-				isInProjectFolder = args.isInProjectFolder;
+				args.rootDirectory
+					? (rootDirectory = args.rootDirectory)
+					: false;
+				args.currentFileFormat
+					? (currentFileFormat = args.currentFileFormat)
+					: false;
+				args.formatToFormatTo
+					? (formatToFormatTo = args.formatToFormatTo)
+					: false;
+				args.excludeDirectories
+					? (excludeDirectories = excludeDirectories)
+					: false;
+				args.isDryRun ? (isDryRun = args.isDryRun) : false,
+					args.isLog ? (isLog = args.isLog) : false;
+				args.isInProjectFolder ? isInProjectFolder : false;
 				//TODO set to false and make it find outer src folder and make it root
 			}
 		}
@@ -47,29 +57,38 @@ class FileFormat {
 		isDryRun ? (this.isLog = true) : (this.isLog = false);
 		this.isDryRun = isDryRun;
 		this.isLog = isLog;
+
+		console.log(excludeDirectories, " exclude diretcories");
 	}
 	init() {
 		const directories = [];
-		fs.readdir(this.rootDirectory, { withFileTypes: true }, (err, files) => {
-			files.forEach((file) => {
-				const filePath = file.path;
-				if (
-					fs.lstatSync(filePath).isDirectory() &&
-					!this.excludeDirectories.includes(filePath)
-				) {
-					directories.push(filePath);
-				}
-			});
-		});
+		fs.readdir(
+			this.rootDirectory,
+			{ withFileTypes: true },
+			(err, files) => {
+				files.forEach((file) => {
+					const filePath = file.path;
+					if (
+						fs.lstatSync(filePath).isDirectory() &&
+						!this.excludeDirectories.includes(filePath)
+					) {
+						directories.push(filePath);
+					}
+				});
+			}
+		);
 
 		let directoriesTouched = 0;
 		let filesTouched = 0;
-		const { changed, filesChanged } = this.renameFilesInDirectory(this.rootDirectory);
+		const { changed, filesChanged } = this.renameFilesInDirectory(
+			this.rootDirectory
+		);
 		filesTouched += filesChanged;
 		directoriesTouched += changed ? 1 : 0;
 
 		directories.forEach((directory) => {
-			const { changed, filesChanged } = this.renameFilesInDirectory(directory);
+			const { changed, filesChanged } =
+				this.renameFilesInDirectory(directory);
 			if (changed) {
 				directoriesTouched += 1;
 				filesTouched += filesChanged;
@@ -77,15 +96,17 @@ class FileFormat {
 		});
 		if (this.isLog) {
 			console.dirxml(
-				'Directories touched = ' + directoriesTouched + ', files changed = ' + filesTouched
+				"Directories touched = " +
+					directoriesTouched +
+					", files changed = " +
+					filesTouched
 			);
-
 		}
 	}
 	getRootDirectoryAbsolutePath(directory) {
 		const filePath = path.resolve(directory);
 		if (!fs.lstatSync(filePath).isDirectory()) {
-			throw Error('No such directory');
+			throw Error("No such directory");
 		}
 		return filePath;
 	}
@@ -93,26 +114,29 @@ class FileFormat {
 	renameFilesInDirectory(directory) {
 		let filesChanged = 0;
 		const files = fs.readdirSync(directory, { withFileTypes: true });
-		for(const file of files){
-			const format = file.name.split('.').at(-1);
+		for (const file of files) {
+			const format = file.name.split(".").at(-1);
 			const filePath = file.path + "/" + file.name;
 
-			if (format === this.currentFileFormat 
-				&& fs.lstatSync(filePath).isFile()) {
-				const newFileName = file.name.slice(0).replace(format, this.formatToFormatTo);
+			if (
+				format === this.currentFileFormat &&
+				fs.lstatSync(filePath).isFile()
+			) {
+				const newFileName = file.name
+					.slice(0)
+					.replace(format, this.formatToFormatTo);
 				if (this.isDryRun) {
 					filesChanged += 1;
 					continue;
 				}
-				const newFilePath = directory + '/' + newFileName
-				
-				fs.renameSync(filePath,  newFilePath);//does not return error on incorrect input(?), returns undefined on success. GENIUS
-				if(!fs.existsSync(filePath)){// if changed
-					filesChanged +=1;
+				const newFilePath = directory + "/" + newFileName;
+
+				fs.renameSync(filePath, newFilePath); //does not return error on incorrect input(?), returns undefined on success. GENIUS
+				if (!fs.existsSync(filePath)) {
+					// if changed
+					filesChanged += 1;
 				}
 			}
-		
-			
 		}
 
 		const isDirectoryChanged = filesChanged > 0;
@@ -121,9 +145,9 @@ class FileFormat {
 }
 
 const fileFormat = new FileFormat({
-	rootDirectory: 'test_for_file_formatting',
-	currentFileFormat: 'ts',
-	formatToFormatTo: 'js',
+	rootDirectory: "src",
+	currentFileFormat: "js",
+	formatToFormatTo: "ts",
 	isDryRun: false,
 });
 fileFormat.init();
