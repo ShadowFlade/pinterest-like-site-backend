@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { parseCLIArgs } = require("./comand_line_arguments_parser");
 
+//TODO does not convert files in directories pogchamp
 /**
  *
  * @class FileFormat
@@ -31,10 +32,13 @@ class FileFormat {
 
 			//TODO isnt there a better way to do this?
             //TODO well now this is total bullshit, need to fix this asap
+            //TODO do this with Object.entries ??
 			if (args) {
 				args.rootDirectory
 					? (rootDirectory = args.rootDirectory)
 					: false;
+                console.log(rootDirectory,' rootDirectory')
+                console.log(args.rootDirectory,' args root directory')
 				args.currentFileFormat
 					? (currentFileFormat = args.currentFileFormat)
 					: false;
@@ -51,6 +55,7 @@ class FileFormat {
 			}
 		}
 		this.rootDirectory = this.getRootDirectoryAbsolutePath(rootDirectory);
+        console.log(this.rootDirectory,' rootDirectory')
 		this.currentFileFormat = currentFileFormat;
 		this.formatToFormatTo = formatToFormatTo;
 		this.excludeDirectories = excludeDirectories;
@@ -106,7 +111,7 @@ class FileFormat {
 	getRootDirectoryAbsolutePath(directory) {
 		const filePath = path.resolve(directory);
 		if (!fs.lstatSync(filePath).isDirectory()) {
-			throw Error("No such directory");
+			throw Error("No such directory you dumbass");
 		}
 		return filePath;
 	}
